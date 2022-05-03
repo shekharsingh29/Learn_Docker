@@ -1,0 +1,117 @@
+############################## Docker ######################################
+
+1. docker version --> Gives the docker and docker engine(or daemon) version detail
+
+2. docker info --> Gives a complete detail about docker host on which docker is installed. Like memory and cpu detail
+
+3. docker image ls --> Lists out all the docker images available locally and are not needed to be pulled from docker hub, container registry like ECR
+
+4. docker container ls --> Lists out all docker container currently running
+
+5. docker container run ubuntu(image_name) --> Tghis will download an image of ubuntu from docker hub or any container registry in case the image 
+        is not available locally and run it inside a container
+6. docker container run ubuntu sleep 60 --> This will run the sleep process in the ubuntu image and container will be active for 60 seconds
+
+7. docker container run busybox ping 8.8.8.8 --> This will keep the container running which has an image of busybox
+
+8. docker container run hello-world ping 8.8.8.8 ---> This will error out because hello-world image is a very basic image and ping executable isn't
+      available
+9. docker container run -d ubuntu sleep 60 --> Here -d means in detached mode. This will run the ubuntu container in detached or background mode and 
+      will return a container ID. 
+10. docker system prune --all --> This will remove all the docker images downloaded and along with it any cache.
+
+11. docker container --help --> Lists out all the commands that are available in combination with docker container.
+
+12. docker logs container_ID --> This will list out all logs related to containers
+
+13. docker ps --> It will list out all the containers and images available
+
+14. docker container stop CONT_ID --> This will stop the container after 10s interval
+
+15. docker container restart CONT_ID --> This will restart the container
+
+16. docker container start IMAGE_ID --> This will start the container
+
+17. docker container rm CONT_ID -f --> This will remove the container by force and is used in case of running once.
+
+18. docker container rm CONT_ID1 CONT_ID2 CONT_ID3 --> This is used for containers that have excited and is used for deleting the image.
+
+19. docker container KILL CONT_ID --> This will stop the running container without a grace period of 10s.
+
+20. docker login --> This will give you a prompt to login to docker hub so that you can publish images
+
+21. docker container top CONT_ID --> This will list ouot detailed resource consumption for a running container
+
+22. docker inspect IMAGE_ID/CONT_ID --> This will list all the details like its IP and the Image version it is running on.
+
+23. docker container stats CONT_ID[optional] --> This will list all consumption stats of all the containers or the specified one.
+
+24. 
+
+docker commit -c 'CMD ["redis-server"]' container_ID --> To make image from a container_ID using command, but still making 
+image using Dockerfile is preferred.
+
+docker build -f custom_docker_file_name . ---> This is used in Dev environment like "Dockerfile.dev" and this filename -f
+    should be specified.
+
+
+
+
+############################# Docker Compose ################################
+
+docker-compose up --build --> If you have to build the image from Dockerfile
+
+docker-compose up If the image already exists
+
+
+docker-compose up ---> Is used to build multiple containers
+
+
+docker-compose down ---> Is used to bring down multiple containers
+
+
+docker-compose ls --> lists out all the running containers ( a important gotcha here is ... docker-compose.yml file should be in the same
+                    directory where you are trying to run the command)
+
+docker-compose up -d --> This will bring up containers in backgroud mode, just like "docker run -d image_mname".
+
+
+
+
+
+############################### Docker SWARM ##############################
+
+1.  dockerdocker info --> This will show whether docker swarm is active or not.
+2.  docker swarm init --> This will initialize the docker swarm and docker swarm will become active.
+    In some cases (Virtual and cloud machines) it will fail then the command used should be
+
+    docker swarm init --advertise-addr dco(IP of the machine)
+
+3.  docker swarm --help ---> This will list out all the docker swarm commands
+4.  docker service --help --> This will list out all the service related commands to be run on docker swarm.
+5.  docker service ls --> This will show how many services are running, how many replicas and images are running 
+    in those services.
+6.  docker service inspect service_name/service_id --> This will list complete detail of the service in 
+    question.
+7.  docker service ps service_name/service_id --> This will list out details about the replicas running on that
+    service like the container_id, image service_name
+8.  docker service create image_name command --> This is used to create the docker service.
+    eg. docker service create nginx ping www.google.com
+9.  docker service update service_name/service_id --replicas 4 --> This is used to increase/decrease replicas
+    Suppose after the above command number of replcas have increase to 4. If you manually remove one of the     
+    containers/replica ...then still number of replicas will become 4 after a while. This is because we have 
+    defined replicas like that.
+10. docker swarm join-token manager --> This will generate a command with token whih you need to run
+    on other nodes. The system on which this command is run becomes the leader node.
+11. docker swarm leave -f --> If a node is already part of swarm then it will generate error wile joining.
+    Run this command and run the command generate from above command.
+12. docker node ls --> This will list out node details in docker swarm.
+13. docker node --help --> This will list all the nodes
+14. 2 networks are created by default when a swarm is initialized docker_gwbridge and ingress, they are of driver type 
+	bridge and overlay respectively.
+15. docker network create -d overlay my_overlay --> command to create your own network of driver type my_overlay
+16. docker service create --name my_drupal --network my_overlay -p 80:80 --mount type=volume,source=db-data,target=
+	/var/lib/drupal/data drupal
+
+    #### Docker STACK ###
+17. docker stack deploy -c docker-compose.yml nginx_start --> Deploy a service in docker swarm using docker-compose
