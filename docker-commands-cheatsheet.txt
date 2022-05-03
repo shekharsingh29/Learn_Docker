@@ -46,25 +46,69 @@
 
 23. docker container stats CONT_ID[optional] --> This will list all consumption stats of all the containers or the specified one.
 
-24. 
+24. docker container run -it ubuntu /bin/bash --> This will provide the shell inside the container image "ubuntu". You can use exit or Ctrl-C to exit out
+    of shell
 
-docker commit -c 'CMD ["redis-server"]' container_ID --> To make image from a container_ID using command, but still making 
+25. docker container run -it -p 3000:80 ubuntu /bin/bash  --> This will publish the port on in the manner "host:docker_image".
+
+26. docker exec -it CONT_ID ping 8.8.8.8 --> this is used to execute the command in running container, and -it is used to attach the current 
+        input terminal to the output terminal of container
+
+27. docker commit -c 'CMD ["redis-server"]' container_ID --> To make image from a container_ID using command, but still making 
 image using Dockerfile is preferred.
 
-docker build -f custom_docker_file_name . ---> This is used in Dev environment like "Dockerfile.dev" and this filename -f
+28. docker build -f custom_docker_file_name . ---> This is used in Dev environment like "Dockerfile.dev" and this filename -f
     should be specified.
 
+29. docker container rename CONT_ID new_name --> This is used to rename container 
 
+30. docker container run --name web_server -it ubuntu /bin/bash --> Give a name of your own
+
+31. docker container attach CONT_ID/CONT_NAME  --> When we go into the shell of a container the default username is root.Using this we can go into 
+        shell of a container without using -it. 
+
+32. docker container pause CONT_ID/CONT_NAME --> When it is in paused state you can do stuff  on this container like entering its shell.
+
+33. docker container unpause CONT_ID/CONT_NAME --> You always need to unpause the container before working on it.
+
+34. docker container wait CONT_ID/CONT_NAME --> After running this command the terminal goes in a wait state and then from another terminal you can 
+        go and enter kill command and and it will return with code 137.
+
+35. docker-interface ==> If you do "ifconfig" on docker host machine then a network interface "docker 0" will be visible apart from usual "eth0". This 
+        network interface is used to connect docker containers to internet via host. It's like a bridge.
+
+36. docker container cp filename CONT_ID:/destination_folder --> To copy file within a container
+
+37. docker container/image export CONT_ID > or -o some_image.tar --> This tar will contain the image of the container exported and will contain all the files 
+        and folder which were in the running container
+
+38. docker image import some_image.tar new_image_name --> Since it was exported aas image tar so it has to be imported as image
+
+39. docker container commit CONT_ID new_image_name --> This command is like docker docker container export and the new image can be used to build new container
+
+40. docker image tag new_image_name shekharsingh29/new_image_name --> This is used to maintain uniqueness in docker registry when image is pushed there
+
+or you can use below steps instead of 40.
+
+1 >> docker container commit CONT_ID shekharsingh29/new_image_name
+2 >> docker container export CONT_ID new_image_name.tar
+  >> docker image import new_image_name.tar shekharsingh29/new_image_name
+
+post this you can do "docker login"
+
+41. docker image push shekharsingh29/new_image_name
+
+42. docker build -t new_tag_name image_name
 
 
 ############################# Docker Compose ################################
 
 docker-compose up --build --> If you have to build the image from Dockerfile
 
-docker-compose up If the image already exists
+docker-compose up . --> If the image already exists
 
 
-docker-compose up ---> Is used to build multiple containers
+docker-compose up . ---> Can be used to build multiple containers
 
 
 docker-compose down ---> Is used to bring down multiple containers
